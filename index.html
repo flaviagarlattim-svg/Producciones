@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rendimientos de Producción · Viajero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* CONFIGURACIÓN: la URL de la hoja se pega en la constante URL_HOJA,
+   al inicio del script, al final de este archivo. */
+:root{
+  --naranja:#E84315;
+  --naranja-osc:#C2360F;
+  --naranja-suave:#FDEDE7;
+  --tinta:#1F1B18;
+  --tinta-2:#5C544E;
+  --linea:#E6DFD9;
+  --fondo:#F7F3EF;
+  --tarjeta:#FFFFFF;
+  --campo:#FFFFFF;
+  --error:#C62828;
+  --ok:#2E7D32;
+  --ok-suave:#E8F3E9;
+  --radio:14px;
+  --fuente:"Geomanist","Outfit",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --naranja:#FF6A3D;
+    --naranja-osc:#FF835C;
+    --naranja-suave:#3A2119;
+    --tinta:#F3EEEA;
+    --tinta-2:#B8AEA6;
+    --linea:#3A3430;
+    --fondo:#171412;
+    --tarjeta:#211D1A;
+    --campo:#2A2522;
+    --error:#FF7B72;
+    --ok:#7BC67E;
+    --ok-suave:#1C2B1D;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--fondo);
+  color:var(--tinta);
+  font-family:var(--fuente);
+  font-size:16px;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+}
+.cabecera{
+  background:var(--naranja);
+  color:#fff;
+  padding:28px 16px 64px;
+}
+.cabecera .envoltura{max-width:680px;margin:0 auto}
+.marca{
+  display:flex;align-items:center;gap:10px;
+  font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:12px;opacity:.92;
+}
+.marca svg{width:22px;height:22px}
+.cabecera h1{
+  margin:14px 0 6px;font-size:clamp(26px,6vw,34px);line-height:1.1;font-weight:700;letter-spacing:-.01em;
+}
+.cabecera p{margin:0;max-width:52ch;opacity:.92}
+main{max-width:680px;margin:-40px auto 48px;padding:0 16px}
+.tarjeta{
+  background:var(--tarjeta);
+  border:1px solid var(--linea);
+  border-radius:var(--radio);
+  padding:22px 18px;
+  margin-bottom:14px;
+  box-shadow:0 1px 2px rgba(0,0,0,.04);
+}
+@media (min-width:560px){.tarjeta{padding:26px 26px}}
+.aviso{
+  display:none;
+  background:var(--naranja-suave);
+  border:1px solid var(--naranja);
+  color:var(--tinta);
+  border-radius:var(--radio);
+  padding:12px 14px;margin-bottom:14px;font-size:14px;
+}
+.aviso.visible{display:block}
+.paso{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.num{
+  flex:0 0 28px;height:28px;border-radius:50%;
+  background:var(--naranja);color:#fff;font-weight:600;font-size:14px;
+  display:grid;place-items:center;
+}
+.paso h2{margin:2px 0 0;font-size:17px;font-weight:600;line-height:1.3}
+.ayuda{color:var(--tinta-2);font-size:14px;margin:4px 0 0}
+.ejemplo{
+  margin:12px 0 4px;padding:12px 14px;border-left:3px solid var(--naranja);
+  background:var(--naranja-suave);border-radius:0 10px 10px 0;font-size:14px;color:var(--tinta);
+}
+.ejemplo b{font-weight:600}
+label.sub{display:block;font-weight:500;font-size:14px;margin:14px 0 6px}
+input[type=text],input[type=number],input[type=date],select{
+  width:100%;
+  font:inherit;color:var(--tinta);
+  background:var(--campo);
+  border:1.5px solid var(--linea);
+  border-radius:10px;
+  padding:12px 14px;
+  min-height:48px;
+  appearance:none;-webkit-appearance:none;
+}
+select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23E84315' stroke-width='2'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:38px;
+}
+input:focus,select:focus{outline:none;border-color:var(--naranja);box-shadow:0 0 0 3px color-mix(in srgb,var(--naranja) 22%,transparent)}
+.invalido input,.invalido select,.invalido .zona-foto{border-color:var(--error)}
+.msg-error{display:none;color:var(--error);font-size:13px;margin-top:6px}
+.invalido > .msg-error,.invalido .msg-error.propio{display:block}
+.fila3{display:grid;grid-template-columns:1fr;gap:0 12px}
+@media (min-width:560px){.fila3{grid-template-columns:1fr 1fr 1fr}}
+.fila3 label.sub{min-height:0}
+.otro{display:none;margin-top:8px}
+.otro.visible{display:block}
+.fecha-legible{font-size:13px;color:var(--tinta-2);margin-top:6px;min-height:1em}
+.resumen-calc{
+  margin-top:14px;font-size:14px;color:var(--tinta-2);
+  display:none;
+}
+.resumen-calc.visible{display:block}
+.resumen-calc b{color:var(--tinta);font-weight:600}
+
+.zona-foto{
+  position:relative;
+  border:1.5px dashed var(--linea);
+  border-radius:12px;
+  padding:22px 16px;
+  text-align:center;
+  background:var(--campo);
+  cursor:pointer;
+  transition:border-color .15s, background .15s;
+}
+.zona-foto:hover,.zona-foto.arrastre{border-color:var(--naranja);background:var(--naranja-suave)}
+.zona-foto input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.zona-foto svg{width:30px;height:30px;color:var(--naranja)}
+.zona-foto .t1{font-weight:600;margin-top:6px}
+.zona-foto .t2{font-size:13px;color:var(--tinta-2)}
+.vista{display:none;align-items:center;gap:14px;margin-top:12px}
+.vista.visible{display:flex}
+.vista img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid var(--linea)}
+.vista .info{flex:1;min-width:0;font-size:14px}
+.vista .info .n{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vista .info .s{color:var(--tinta-2);font-size:13px}
+.btn-quitar{
+  font:inherit;font-size:14px;background:none;border:none;color:var(--naranja);
+  cursor:pointer;padding:8px;
+}
+
+.acciones{margin-top:8px}
+.btn{
+  width:100%;min-height:54px;
+  font:inherit;font-weight:600;font-size:17px;
+  background:var(--naranja);color:#fff;border:none;border-radius:12px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:background .15s, transform .05s;
+}
+.btn:hover{background:var(--naranja-osc)}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.7;cursor:progress}
+.btn.sec{background:transparent;color:var(--naranja);border:1.5px solid var(--naranja)}
+.btn.sec:hover{background:var(--naranja-suave)}
+.giro{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;animation:g .8s linear infinite;display:none}
+.btn[disabled] .giro{display:inline-block}
+@keyframes g{to{transform:rotate(360deg)}}
+.error-envio{display:none;color:var(--error);font-size:14px;margin-top:10px;text-align:center}
+.error-envio.visible{display:block}
+.pie{color:var(--tinta-2);font-size:12px;text-align:center;margin-top:18px}
+
+#exito{display:none}
+#exito.visible{display:block}
+.exito-cab{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.check{width:44px;height:44px;border-radius:50%;background:var(--ok-suave);color:var(--ok);display:grid;place-items:center;flex:0 0 44px}
+.check svg{width:24px;height:24px}
+.exito-cab h2{margin:0;font-size:20px}
+dl.resumen{margin:6px 0 18px;display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:15px}
+dl.resumen dt{color:var(--tinta-2)}
+dl.resumen dd{margin:0;font-weight:500;overflow-wrap:anywhere}
+.oculto{display:none !important}
+</style>
+</head>
+<body>
+
+<header class="cabecera">
+  <div class="envoltura">
+    <div class="marca">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h18M5 11V7a7 7 0 0 1 14 0v4M4 11l1.5 9h13L20 11"/></svg>
+      Viajero Hostels · Bar y Cocina
+    </div>
+    <h1>Rendimientos de producción</h1>
+    <p>Registra cada producción para comparar lo que indica la ficha técnica con lo que realmente se obtuvo.</p>
+  </div>
+</header>
+
+<main>
+  <div class="aviso" id="avisoConfig">
+    <b>Formulario sin conectar.</b> Falta pegar la URL de la hoja de Google en el archivo (constante <code>URL_HOJA</code>). Los registros no se guardarán hasta hacerlo.
+  </div>
+
+  <form id="form" novalidate>
+
+    <!-- 1. Centro de operación -->
+    <section class="tarjeta" data-campo="centro">
+      <div class="paso"><div class="num">1</div><div><h2>Centro de operación</h2></div></div>
+      <select id="centro" name="centro" required>
+        <option value="" selected disabled>Selecciona la sede</option>
+        <option>Bogotá</option>
+        <option>Cali</option>
+        <option>Cartagena</option>
+        <option>Getsemaní</option>
+        <option>Guatapé</option>
+        <option>Medellín</option>
+        <option>Salento</option>
+        <option>Santa Marta</option>
+        <option>Tayrona</option>
+      </select>
+      <div class="msg-error">Selecciona el centro de operación.</div>
+    </section>
+
+    <!-- 2. Nombre -->
+    <section class="tarjeta" data-campo="nombre">
+      <div class="paso"><div class="num">2</div><div><h2>Nombre</h2></div></div>
+      <input type="text" id="nombre" name="nombre" placeholder="Tu nombre y apellido" autocomplete="name" maxlength="80" required>
+      <div class="msg-error">Escribe tu nombre.</div>
+    </section>
+
+    <!-- 3. Fecha -->
+    <section class="tarjeta" data-campo="fecha">
+      <div class="paso"><div class="num">3</div><div><h2>Fecha</h2><p class="ayuda">Día – mes – año de la producción.</p></div></div>
+      <input type="date" id="fecha" name="fecha" required>
+      <div class="fecha-legible" id="fechaLegible"></div>
+      <div class="msg-error">Selecciona la fecha (no puede ser posterior a hoy).</div>
+    </section>
+
+    <!-- 4. Preparación -->
+    <section class="tarjeta" data-campo="preparacion">
+      <div class="paso"><div class="num">4</div><div><h2>Nombre de la preparación</h2><p class="ayuda">Por ejemplo: arroz blanco, hogao, salsa burger, sirope simple, patacones.</p></div></div>
+      <input type="text" id="preparacion" name="preparacion" placeholder="Nombre de la preparación" maxlength="100" required>
+      <div class="msg-error">Escribe el nombre de la preparación.</div>
+    </section>
+
+    <!-- 5. Recetas y rendimiento -->
+    <section class="tarjeta" data-campo="rendimiento">
+      <div class="paso"><div class="num">5</div><div>
+        <h2>Cantidad de recetas según ficha técnica</h2>
+        <p class="ayuda">Recetas realizadas vs. rendimiento real obtenido.</p>
+      </div></div>
+      <div class="ejemplo">
+        <b>Ficha técnica patacón:</b> 1 receta = 6 porciones de 100 g.<br>
+        <b>Reporte:</b> se realizaron 2 recetas → rendimiento obtenido: 12 porciones de 100 g.
+      </div>
+
+      <div class="fila3">
+        <div data-sub="recetas">
+          <label class="sub" for="recetas">Recetas realizadas</label>
+          <select id="recetas" name="recetas" required>
+            <option value="" selected disabled>Elegir</option>
+            <option value="0.5">x 0,5</option>
+            <option value="1">x 1</option>
+            <option value="2">x 2</option>
+            <option value="3">x 3</option>
+            <option value="4">x 4</option>
+            <option value="5">x 5</option>
+            <option value="otro">Otro</option>
+          </select>
+          <div class="otro" id="otroCaja">
+            <input type="number" id="recetasOtro" inputmode="decimal" min="0.1" step="0.1" placeholder="¿Cuántas?">
+          </div>
+          <div class="msg-error propio">Indica las recetas realizadas.</div>
+        </div>
+        <div data-sub="unidad">
+          <label class="sub" for="unidad">Rendimiento real obtenido</label>
+          <select id="unidad" name="unidad" required>
+            <option value="" selected disabled>Elegir</option>
+            <option value="GR/ML">GR/ML</option>
+            <option value="Porción">Porción</option>
+          </select>
+          <div class="msg-error propio">Elige la unidad.</div>
+        </div>
+        <div data-sub="total">
+          <label class="sub" for="total">Total</label>
+          <input type="number" id="total" name="total" inputmode="decimal" min="0" step="any" placeholder="0" required>
+          <div class="msg-error propio">Escribe el total (mayor a 0).</div>
+        </div>
+      </div>
+      <div class="resumen-calc" id="resumenCalc"></div>
+    </section>
+
+    <!-- 6. Foto -->
+    <section class="tarjeta" data-campo="foto">
+      <div class="paso"><div class="num">6</div><div><h2>Foto de ficha técnica</h2><p class="ayuda">Carga la imagen de la ficha técnica de la preparación realizada.</p></div></div>
+      <div class="zona-foto" id="zonaFoto">
+        <input type="file" id="foto" accept="image/*" aria-label="Cargar foto de la ficha técnica">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg>
+        <div class="t1">Tomar foto o elegir imagen</div>
+        <div class="t2">JPG, PNG o HEIC del teléfono</div>
+      </div>
+      <div class="vista" id="vista">
+        <img id="vistaImg" alt="Vista previa de la ficha técnica">
+        <div class="info"><div class="n" id="vistaNombre"></div><div class="s" id="vistaPeso"></div></div>
+        <button type="button" class="btn-quitar" id="quitarFoto">Quitar</button>
+      </div>
+      <div class="msg-error">Carga la foto de la ficha técnica.</div>
+    </section>
+
+    <div class="acciones">
+      <button type="submit" class="btn" id="enviar"><span class="giro"></span><span id="enviarTxt">Enviar registro</span></button>
+      <div class="error-envio" id="errorEnvio"></div>
+    </div>
+    <p class="pie">Viajero Hostels Colombia · Seguimiento de rendimientos A&amp;B</p>
+  </form>
+
+  <section class="tarjeta" id="exito" aria-live="polite">
+    <div class="exito-cab">
+      <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <div><h2>Registro enviado</h2><div class="ayuda" id="exitoId"></div></div>
+    </div>
+    <dl class="resumen" id="resumenFinal"></dl>
+    <button type="button" class="btn" id="otraVez">Registrar otra producción</button>
+  </section>
+</main>
+
+<script>
+/* ================== CONFIGURACIÓN ================== */
+const URL_HOJA = "https://script.google.com/macros/s/AKfycbzA4d2lpPt7eMBx_TZbbq6s7YypFb6N-2U45zlKt8uKylHSrq-gN2s8GenbW6v67stLNw/exec"; // termina en /exec
+/* =================================================== */
+
+const $ = (id) => document.getElementById(id);
+const conectado = /^https:\/\/script\.google\.com\/.+\/exec$/.test(URL_HOJA);
+if (!conectado) $("avisoConfig").classList.add("visible");
+
+const form = $("form");
+let fotoProcesada = null; // {base64, mimeType, nombre}
+
+/* ---------- Utilidades ---------- */
+const hoyISO = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+};
+const isoADMA = (iso) => { const [a,m,d] = iso.split("-"); return `${d}-${m}-${a}`; };
+const fmtNum = (n) => Number(n).toLocaleString("es-CO", {maximumFractionDigits: 2});
+const fmtPeso = (b) => b > 1048576 ? (b/1048576).toFixed(1) + " MB" : Math.round(b/1024) + " KB";
+const guardar = (k, v) => { try { localStorage.setItem(k, v); } catch (_) {} };
+const leer = (k) => { try { return localStorage.getItem(k) || ""; } catch (_) { return ""; } };
+
+/* ---------- Fecha ---------- */
+const fecha = $("fecha");
+fecha.max = hoyISO();
+fecha.value = hoyISO();
+const pintarFecha = () => {
+  $("fechaLegible").textContent = fecha.value ? "Fecha registrada: " + isoADMA(fecha.value) : "";
+};
+fecha.addEventListener("input", pintarFecha);
+pintarFecha();
+
+/* ---------- Recordar sede y nombre en este dispositivo ---------- */
+if (leer("rend_centro")) $("centro").value = leer("rend_centro");
+if (leer("rend_nombre")) $("nombre").value = leer("rend_nombre");
+
+/* ---------- Recetas "Otro" ---------- */
+const recetas = $("recetas");
+recetas.addEventListener("change", () => {
+  const esOtro = recetas.value === "otro";
+  $("otroCaja").classList.toggle("visible", esOtro);
+  if (esOtro) $("recetasOtro").focus();
+  calcular();
+});
+
+function valorRecetas() {
+  if (recetas.value === "otro") {
+    const v = parseFloat(String($("recetasOtro").value).replace(",", "."));
+    return v > 0 ? v : NaN;
+  }
+  return recetas.value ? parseFloat(recetas.value) : NaN;
+}
+function valorTotal() {
+  const v = parseFloat(String($("total").value).replace(",", "."));
+  return v > 0 ? v : NaN;
+}
+
+/* ---------- Cálculo de rendimiento por receta ---------- */
+function calcular() {
+  const r = valorRecetas(), t = valorTotal(), u = $("unidad").value;
+  const box = $("resumenCalc");
+  if (r > 0 && t > 0 && u) {
+    const unidadTxt = u === "Porción" ? "porciones" : "gr/ml";
+    box.innerHTML = `Equivale a <b>${fmtNum(t / r)} ${unidadTxt}</b> por receta. Compáralo con lo que indica la ficha técnica.`;
+    box.classList.add("visible");
+  } else {
+    box.classList.remove("visible");
+  }
+}
+["recetasOtro","total"].forEach(id => $(id).addEventListener("input", calcular));
+$("unidad").addEventListener("change", calcular);
+
+/* ---------- Foto: compresión en el navegador ---------- */
+const inputFoto = $("foto");
+const zona = $("zonaFoto");
+["dragenter","dragover"].forEach(ev => zona.addEventListener(ev, () => zona.classList.add("arrastre")));
+["dragleave","drop"].forEach(ev => zona.addEventListener(ev, () => zona.classList.remove("arrastre")));
+
+inputFoto.addEventListener("change", async () => {
+  const archivo = inputFoto.files && inputFoto.files[0];
+  if (!archivo) return;
+  if (!archivo.type.startsWith("image/") && !/\.(heic|heif)$/i.test(archivo.name)) {
+    alert("El archivo debe ser una imagen.");
+    inputFoto.value = "";
+    return;
+  }
+  $("vistaNombre").textContent = archivo.name;
+  $("vistaPeso").textContent = "Procesando…";
+  $("vista").classList.add("visible");
+  try {
+    fotoProcesada = await comprimir(archivo);
+    $("vistaImg").src = "data:image/jpeg;base64," + fotoProcesada.base64;
+    $("vistaPeso").textContent = "Lista para enviar · " + fmtPeso(fotoProcesada.base64.length * 0.75);
+  } catch (e) {
+    // Si el navegador no puede leerla (p. ej. HEIC en algunos equipos), se envía el original.
+    if (archivo.size > 15 * 1048576) {
+      alert("La imagen es demasiado pesada. Toma la foto de nuevo o usa una de menor tamaño.");
+      quitarFoto(); return;
+    }
+    fotoProcesada = { base64: await aBase64(archivo), mimeType: archivo.type || "image/heic", nombre: archivo.name };
+    $("vistaImg").removeAttribute("src");
+    $("vistaPeso").textContent = "Lista para enviar · " + fmtPeso(archivo.size);
+  }
+  marcar("foto", false);
+});
+
+function aBase64(blob) {
+  return new Promise((ok, mal) => {
+    const fr = new FileReader();
+    fr.onload = () => ok(String(fr.result).split(",")[1]);
+    fr.onerror = mal;
+    fr.readAsDataURL(blob);
+  });
+}
+function comprimir(archivo, maxLado = 1600, calidad = 0.82) {
+  return new Promise((ok, mal) => {
+    const url = URL.createObjectURL(archivo);
+    const img = new Image();
+    img.onload = () => {
+      const esc = Math.min(1, maxLado / Math.max(img.naturalWidth, img.naturalHeight));
+      const w = Math.round(img.naturalWidth * esc), h = Math.round(img.naturalHeight * esc);
+      const c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      const ctx = c.getContext("2d");
+      ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      const datos = c.toDataURL("image/jpeg", calidad);
+      ok({ base64: datos.split(",")[1], mimeType: "image/jpeg", nombre: archivo.name.replace(/\.[^.]+$/, "") + ".jpg" });
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); mal(new Error("no legible")); };
+    img.src = url;
+  });
+}
+function quitarFoto() {
+  fotoProcesada = null;
+  inputFoto.value = "";
+  $("vista").classList.remove("visible");
+  $("vistaImg").removeAttribute("src");
+}
+$("quitarFoto").addEventListener("click", quitarFoto);
+
+/* ---------- Validación ---------- */
+function marcar(campo, invalido) {
+  const s = document.querySelector(`[data-campo="${campo}"], [data-sub="${campo}"]`);
+  if (s) s.classList.toggle("invalido", invalido);
+}
+function validar() {
+  const errores = [];
+  const chk = (campo, ok) => { marcar(campo, !ok); if (!ok) errores.push(campo); };
+  chk("centro", !!$("centro").value);
+  chk("nombre", $("nombre").value.trim().length >= 2);
+  chk("fecha", !!fecha.value && fecha.value <= hoyISO());
+  chk("preparacion", $("preparacion").value.trim().length >= 2);
+  chk("recetas", valorRecetas() > 0);
+  chk("unidad", !!$("unidad").value);
+  chk("total", valorTotal() > 0);
+  chk("foto", !!fotoProcesada);
+  return errores;
+}
+form.addEventListener("input", (e) => {
+  const sec = e.target.closest("[data-sub], [data-campo]");
+  if (sec && sec.classList.contains("invalido")) sec.classList.remove("invalido");
+});
+form.addEventListener("change", (e) => {
+  const sec = e.target.closest("[data-sub], [data-campo]");
+  if (sec && sec.classList.contains("invalido")) sec.classList.remove("invalido");
+});
+
+/* ---------- Envío ---------- */
+const btn = $("enviar");
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  $("errorEnvio").classList.remove("visible");
+  const errores = validar();
+  if (errores.length) {
+    const primero = document.querySelector(".invalido");
+    if (primero) primero.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+  if (!conectado) {
+    mostrarError("El formulario aún no está conectado a la hoja de Google. Avisa a la persona encargada.");
+    return;
+  }
+
+  const r = valorRecetas();
+  const datos = {
+    centro: $("centro").value,
+    nombre: $("nombre").value.trim(),
+    fecha: isoADMA(fecha.value),
+    preparacion: $("preparacion").value.trim(),
+    recetas: r,
+    unidad: $("unidad").value,
+    total: valorTotal(),
+    foto: fotoProcesada
+  };
+
+  btn.disabled = true;
+  $("enviarTxt").textContent = "Enviando…";
+  try {
+    const resp = await fetch(URL_HOJA, {
+      method: "POST",
+      body: JSON.stringify(datos) // texto plano: evita bloqueos CORS con Apps Script
+    });
+    const res = await resp.json();
+    if (!res.ok) throw new Error(res.error || "Error en la hoja");
+    guardar("rend_centro", datos.centro);
+    guardar("rend_nombre", datos.nombre);
+    mostrarExito(datos, res.id);
+  } catch (err) {
+    mostrarError("No se pudo enviar el registro. Revisa tu conexión a internet e inténtalo de nuevo." +
+      (err && err.message && !/fetch|network|json/i.test(err.message) ? " (" + err.message + ")" : ""));
+  } finally {
+    btn.disabled = false;
+    $("enviarTxt").textContent = "Enviar registro";
+  }
+});
+
+function mostrarError(t) {
+  const el = $("errorEnvio");
+  el.textContent = t;
+  el.classList.add("visible");
+}
+
+function mostrarExito(d, id) {
+  const recTxt = "x " + fmtNum(d.recetas);
+  const filas = [
+    ["Centro", d.centro],
+    ["Nombre", d.nombre],
+    ["Fecha", d.fecha],
+    ["Preparación", d.preparacion],
+    ["Recetas", recTxt],
+    ["Rendimiento", fmtNum(d.total) + " " + (d.unidad === "Porción" ? "porciones" : "gr/ml")],
+    ["Por receta", fmtNum(d.total / d.recetas) + " " + (d.unidad === "Porción" ? "porciones" : "gr/ml")]
+  ];
+  const dl = $("resumenFinal");
+  dl.innerHTML = "";
+  filas.forEach(([k, v]) => {
+    const dt = document.createElement("dt"); dt.textContent = k;
+    const dd = document.createElement("dd"); dd.textContent = v;
+    dl.append(dt, dd);
+  });
+  $("exitoId").textContent = id ? "Código de registro: " + id : "";
+  form.classList.add("oculto");
+  $("exito").classList.add("visible");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+$("otraVez").addEventListener("click", () => {
+  // Conserva sede, nombre y fecha; limpia el resto
+  $("preparacion").value = "";
+  recetas.value = "";
+  $("recetasOtro").value = "";
+  $("otroCaja").classList.remove("visible");
+  $("unidad").value = "";
+  $("total").value = "";
+  calcular();
+  quitarFoto();
+  $("exito").classList.remove("visible");
+  form.classList.remove("oculto");
+  $("preparacion").focus();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+</script>
+</body>
+</html>
