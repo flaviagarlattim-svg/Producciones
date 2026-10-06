@@ -187,6 +187,9 @@ dl.resumen{margin:6px 0 18px;display:grid;grid-template-columns:auto 1fr;gap:8px
 dl.resumen dt{color:var(--tinta-2)}
 dl.resumen dd{margin:0;font-weight:500;overflow-wrap:anywhere}
 .oculto{display:none !important}
+.req{color:var(--naranja);font-weight:600;margin-left:2px}
+.nota-oblig{font-size:14px;color:#fff;margin:0 0 12px;font-weight:500}
+.nota-oblig .req{margin:0;color:#fff}
 </style>
 </head>
 <body>
@@ -208,10 +211,11 @@ dl.resumen dd{margin:0;font-weight:500;overflow-wrap:anywhere}
   </div>
 
   <form id="form" novalidate>
+    <p class="nota-oblig"><span class="req">*</span> Todos los campos son obligatorios.</p>
 
     <!-- 1. Centro de operación -->
     <section class="tarjeta" data-campo="centro">
-      <div class="paso"><div class="num">1</div><div><h2>Centro de operación</h2></div></div>
+      <div class="paso"><div class="num">1</div><div><h2>Centro de operación <span class="req" aria-hidden="true">*</span></h2></div></div>
       <select id="centro" name="centro" required>
         <option value="" selected disabled>Selecciona la sede</option>
         <option>Bogotá</option>
@@ -229,22 +233,22 @@ dl.resumen dd{margin:0;font-weight:500;overflow-wrap:anywhere}
 
     <!-- 2. Nombre -->
     <section class="tarjeta" data-campo="nombre">
-      <div class="paso"><div class="num">2</div><div><h2>Nombre</h2></div></div>
+      <div class="paso"><div class="num">2</div><div><h2>Nombre <span class="req" aria-hidden="true">*</span></h2></div></div>
       <input type="text" id="nombre" name="nombre" placeholder="Tu nombre y apellido" autocomplete="name" maxlength="80" required>
       <div class="msg-error">Escribe tu nombre.</div>
     </section>
 
     <!-- 3. Fecha -->
     <section class="tarjeta" data-campo="fecha">
-      <div class="paso"><div class="num">3</div><div><h2>Fecha</h2><p class="ayuda">Día – mes – año de la producción.</p></div></div>
+      <div class="paso"><div class="num">3</div><div><h2>Fecha <span class="req" aria-hidden="true">*</span></h2><p class="ayuda">Día – mes – año de la producción.</p></div></div>
       <input type="date" id="fecha" name="fecha" required>
       <div class="fecha-legible" id="fechaLegible"></div>
-      <div class="msg-error">Selecciona la fecha (no puede ser posterior a hoy).</div>
+      <div class="msg-error">Selecciona la fecha.</div>
     </section>
 
     <!-- 4. Preparación -->
     <section class="tarjeta" data-campo="preparacion">
-      <div class="paso"><div class="num">4</div><div><h2>Nombre de la preparación</h2><p class="ayuda">Por ejemplo: arroz blanco, hogao, salsa burger, sirope simple, patacones.</p></div></div>
+      <div class="paso"><div class="num">4</div><div><h2>Nombre de la preparación <span class="req" aria-hidden="true">*</span></h2><p class="ayuda">Por ejemplo: arroz blanco, hogao, salsa burger, sirope simple, patacones.</p></div></div>
       <input type="text" id="preparacion" name="preparacion" placeholder="Nombre de la preparación" maxlength="100" required>
       <div class="msg-error">Escribe el nombre de la preparación.</div>
     </section>
@@ -252,17 +256,17 @@ dl.resumen dd{margin:0;font-weight:500;overflow-wrap:anywhere}
     <!-- 5. Recetas y rendimiento -->
     <section class="tarjeta" data-campo="rendimiento">
       <div class="paso"><div class="num">5</div><div>
-        <h2>Cantidad de recetas según ficha técnica</h2>
+        <h2>Cantidad de recetas según ficha técnica <span class="req" aria-hidden="true">*</span></h2>
         <p class="ayuda">Recetas realizadas vs. rendimiento real obtenido.</p>
       </div></div>
       <div class="ejemplo">
-        <b>Ficha técnica patacón:</b> 1 receta = 6 porciones de 100 g.<br>
+        <b>EJEMPLO – Ficha técnica patacón:</b> 1 receta = 6 porciones de 100 g.<br>
         <b>Reporte:</b> se realizaron 2 recetas → rendimiento obtenido: 12 porciones de 100 g.
       </div>
 
       <div class="fila3">
         <div data-sub="recetas">
-          <label class="sub" for="recetas">Recetas realizadas</label>
+          <label class="sub" for="recetas">Recetas realizadas <span class="req" aria-hidden="true">*</span></label>
           <select id="recetas" name="recetas" required>
             <option value="" selected disabled>Elegir</option>
             <option value="0.5">x 0,5</option>
@@ -274,12 +278,12 @@ dl.resumen dd{margin:0;font-weight:500;overflow-wrap:anywhere}
             <option value="otro">Otro</option>
           </select>
           <div class="otro" id="otroCaja">
-            <input type="number" id="recetasOtro" inputmode="decimal" min="0.1" step="0.1" placeholder="¿Cuántas?">
+            <input type="number" id="recetasOtro" required inputmode="decimal" min="0.1" step="0.1" placeholder="¿Cuántas?">
           </div>
           <div class="msg-error propio">Indica las recetas realizadas.</div>
         </div>
         <div data-sub="unidad">
-          <label class="sub" for="unidad">Rendimiento real obtenido</label>
+          <label class="sub" for="unidad">Rendimiento real obtenido <span class="req" aria-hidden="true">*</span></label>
           <select id="unidad" name="unidad" required>
             <option value="" selected disabled>Elegir</option>
             <option value="GR/ML">GR/ML</option>
@@ -288,7 +292,7 @@ dl.resumen dd{margin:0;font-weight:500;overflow-wrap:anywhere}
           <div class="msg-error propio">Elige la unidad.</div>
         </div>
         <div data-sub="total">
-          <label class="sub" for="total">Total</label>
+          <label class="sub" for="total">Total <span class="req" aria-hidden="true">*</span></label>
           <input type="number" id="total" name="total" inputmode="decimal" min="0" step="any" placeholder="0" required>
           <div class="msg-error propio">Escribe el total (mayor a 0).</div>
         </div>
@@ -298,9 +302,9 @@ dl.resumen dd{margin:0;font-weight:500;overflow-wrap:anywhere}
 
     <!-- 6. Foto -->
     <section class="tarjeta" data-campo="foto">
-      <div class="paso"><div class="num">6</div><div><h2>Foto de ficha técnica</h2><p class="ayuda">Carga la imagen de la ficha técnica de la preparación realizada.</p></div></div>
+      <div class="paso"><div class="num">6</div><div><h2>Foto de ficha técnica <span class="req" aria-hidden="true">*</span></h2><p class="ayuda">Carga la imagen de la ficha técnica de la preparación realizada.</p></div></div>
       <div class="zona-foto" id="zonaFoto">
-        <input type="file" id="foto" accept="image/*" aria-label="Cargar foto de la ficha técnica">
+        <input type="file" id="foto" accept="image/*" required aria-label="Cargar foto de la ficha técnica">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg>
         <div class="t1">Tomar foto o elegir imagen</div>
         <div class="t2">JPG, PNG o HEIC del teléfono</div>
@@ -355,7 +359,6 @@ const leer = (k) => { try { return localStorage.getItem(k) || ""; } catch (_) { 
 
 /* ---------- Fecha ---------- */
 const fecha = $("fecha");
-fecha.max = hoyISO();
 fecha.value = hoyISO();
 const pintarFecha = () => {
   $("fechaLegible").textContent = fecha.value ? "Fecha registrada: " + isoADMA(fecha.value) : "";
@@ -483,7 +486,7 @@ function validar() {
   const chk = (campo, ok) => { marcar(campo, !ok); if (!ok) errores.push(campo); };
   chk("centro", !!$("centro").value);
   chk("nombre", $("nombre").value.trim().length >= 2);
-  chk("fecha", !!fecha.value && fecha.value <= hoyISO());
+  chk("fecha", !!fecha.value);
   chk("preparacion", $("preparacion").value.trim().length >= 2);
   chk("recetas", valorRecetas() > 0);
   chk("unidad", !!$("unidad").value);
