@@ -99,7 +99,8 @@ main{max-width:680px;margin:-40px auto 48px;padding:0 16px}
   background:var(--naranja-suave);border-radius:0 10px 10px 0;font-size:14px;color:var(--tinta);
 }
 .ejemplo b{font-weight:600}
-label.sub{display:block;font-weight:500;font-size:14px;margin:14px 0 6px}
+label.sub{display:block;font-weight:500;font-size:14px;margin:14px 0 0}
+label.sub > select,label.sub > input{margin-top:6px;font-weight:400}
 input[type=text],input[type=number],input[type=date],select{
   width:100%;
   font:inherit;color:var(--tinta);
@@ -120,17 +121,35 @@ input:focus,select:focus{outline:none;border-color:var(--naranja);box-shadow:0 0
 .invalido > .msg-error,.invalido .msg-error.propio{display:block}
 .fila3{display:grid;grid-template-columns:1fr;gap:0 12px}
 @media (min-width:560px){.fila3{grid-template-columns:1fr 1fr 1fr}}
-.fila3 label.sub{min-height:0}
 .otro{display:none;margin-top:8px}
 .otro.visible{display:block}
 .fecha-legible{font-size:13px;color:var(--tinta-2);margin-top:6px;min-height:1em}
-.resumen-calc{
-  margin-top:14px;font-size:14px;color:var(--tinta-2);
-  display:none;
-}
+.resumen-calc{margin-top:14px;font-size:14px;color:var(--tinta-2);display:none}
 .resumen-calc.visible{display:block}
 .resumen-calc b{color:var(--tinta);font-weight:600}
 
+/* ---- Bloques de producción ---- */
+.produccion{position:relative}
+.prod-cab{
+  display:none;align-items:center;justify-content:space-between;gap:12px;
+  margin:22px 0 10px;
+}
+.multi .prod-cab{display:flex}
+.prod-tit{
+  display:inline-flex;align-items:center;gap:8px;
+  font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--naranja);
+}
+.prod-tit::before{content:"";width:18px;height:2px;background:var(--naranja);border-radius:2px}
+.prod-nombre{color:var(--tinta-2);font-weight:500;text-transform:none;letter-spacing:0;font-size:14px}
+.btn-quitar-prod{
+  font:inherit;font-size:14px;background:none;border:1px solid var(--linea);color:var(--tinta-2);
+  border-radius:999px;padding:6px 12px;cursor:pointer;
+}
+.btn-quitar-prod:hover{border-color:var(--error);color:var(--error)}
+.produccion:first-child .btn-quitar-prod{display:none}
+.multi .produccion .tarjeta{border-left:3px solid color-mix(in srgb,var(--naranja) 45%,var(--linea))}
+
+/* ---- Fotos ---- */
 .zona-foto{
   position:relative;
   border:1.5px dashed var(--linea);
@@ -146,17 +165,23 @@ input:focus,select:focus{outline:none;border-color:var(--naranja);box-shadow:0 0
 .zona-foto svg{width:30px;height:30px;color:var(--naranja)}
 .zona-foto .t1{font-weight:600;margin-top:6px}
 .zona-foto .t2{font-size:13px;color:var(--tinta-2)}
-.vista{display:none;align-items:center;gap:14px;margin-top:12px}
-.vista.visible{display:flex}
-.vista img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid var(--linea)}
-.vista .info{flex:1;min-width:0;font-size:14px}
-.vista .info .n{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.vista .info .s{color:var(--tinta-2);font-size:13px}
-.btn-quitar{
-  font:inherit;font-size:14px;background:none;border:none;color:var(--naranja);
-  cursor:pointer;padding:8px;
+.zona-foto.llena{padding:14px 16px}
+.zona-foto.llena svg{display:none}
+.zona-foto.completa{display:none}
+.galeria{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px;margin-top:12px}
+.galeria:empty{display:none}
+.mini{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;border:1px solid var(--linea);background:var(--naranja-suave)}
+.mini img{width:100%;height:100%;object-fit:cover;display:block}
+.mini .ph{position:absolute;inset:0;display:grid;place-items:center;font-size:12px;color:var(--tinta-2);text-align:center;padding:6px}
+.mini .x{
+  position:absolute;top:4px;right:4px;width:28px;height:28px;border-radius:50%;
+  border:none;background:rgba(0,0,0,.6);color:#fff;font-size:17px;line-height:1;cursor:pointer;
+  display:grid;place-items:center;
 }
+.mini .x:hover{background:var(--error)}
+.cuenta-fotos{font-size:13px;color:var(--tinta-2);margin-top:8px}
 
+/* ---- Botones ---- */
 .acciones{margin-top:8px}
 .btn{
   width:100%;min-height:54px;
@@ -168,8 +193,10 @@ input:focus,select:focus{outline:none;border-color:var(--naranja);box-shadow:0 0
 .btn:hover{background:var(--naranja-osc)}
 .btn:active{transform:translateY(1px)}
 .btn[disabled]{opacity:.7;cursor:progress}
-.btn.sec{background:transparent;color:var(--naranja);border:1.5px solid var(--naranja)}
+.btn.sec{background:transparent;color:var(--naranja);border:1.5px dashed var(--naranja)}
 .btn.sec:hover{background:var(--naranja-suave)}
+.btn-agregar{margin:4px 0 22px}
+.btn-agregar .mas{font-size:22px;line-height:1;font-weight:500}
 .giro{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;animation:g .8s linear infinite;display:none}
 .btn[disabled] .giro{display:inline-block}
 @keyframes g{to{transform:rotate(360deg)}}
@@ -177,15 +204,20 @@ input:focus,select:focus{outline:none;border-color:var(--naranja);box-shadow:0 0
 .error-envio.visible{display:block}
 .pie{color:var(--tinta-2);font-size:12px;text-align:center;margin-top:18px}
 
+/* ---- Éxito ---- */
 #exito{display:none}
 #exito.visible{display:block}
 .exito-cab{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .check{width:44px;height:44px;border-radius:50%;background:var(--ok-suave);color:var(--ok);display:grid;place-items:center;flex:0 0 44px}
 .check svg{width:24px;height:24px}
 .exito-cab h2{margin:0;font-size:20px}
-dl.resumen{margin:6px 0 18px;display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:15px}
+dl.resumen{margin:6px 0 14px;display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:15px}
 dl.resumen dt{color:var(--tinta-2)}
 dl.resumen dd{margin:0;font-weight:500;overflow-wrap:anywhere}
+ol.lista-prod{margin:0 0 18px;padding:0;list-style:none;border-top:1px solid var(--linea)}
+ol.lista-prod li{padding:10px 0;border-bottom:1px solid var(--linea);font-size:15px}
+ol.lista-prod .p1{font-weight:600}
+ol.lista-prod .p2{color:var(--tinta-2);font-size:14px}
 .oculto{display:none !important}
 .req{color:var(--naranja);font-weight:600;margin-left:2px}
 .nota-oblig{font-size:14px;color:#fff;margin:0 0 12px;font-weight:500}
@@ -246,10 +278,43 @@ dl.resumen dd{margin:0;font-weight:500;overflow-wrap:anywhere}
       <div class="msg-error">Selecciona la fecha.</div>
     </section>
 
+    <!-- 4, 5 y 6: una o varias producciones -->
+    <div id="producciones"></div>
+
+    <button type="button" class="btn sec btn-agregar" id="agregarProd">
+      <span class="mas" aria-hidden="true">+</span> Agrega nueva producción
+    </button>
+
+    <div class="acciones">
+      <button type="submit" class="btn" id="enviar"><span class="giro"></span><span id="enviarTxt">Enviar registro</span></button>
+      <div class="error-envio" id="errorEnvio"></div>
+    </div>
+    <p class="pie">Viajero Hostels Colombia · Seguimiento de rendimientos A&amp;B</p>
+  </form>
+
+  <section class="tarjeta" id="exito" aria-live="polite">
+    <div class="exito-cab">
+      <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <div><h2 id="exitoTitulo">Registro enviado</h2><div class="ayuda" id="exitoId"></div></div>
+    </div>
+    <dl class="resumen" id="resumenFinal"></dl>
+    <ol class="lista-prod" id="listaProd"></ol>
+    <button type="button" class="btn" id="otraVez">Hacer un nuevo registro</button>
+  </section>
+</main>
+
+<!-- Plantilla de una producción (puntos 4, 5 y 6) -->
+<template id="tplProd">
+  <div class="produccion">
+    <div class="prod-cab">
+      <span class="prod-tit">Producción <span class="prod-n">1</span> <span class="prod-nombre"></span></span>
+      <button type="button" class="btn-quitar-prod">Quitar</button>
+    </div>
+
     <!-- 4. Preparación -->
     <section class="tarjeta" data-campo="preparacion">
       <div class="paso"><div class="num">4</div><div><h2>Nombre de la preparación <span class="req" aria-hidden="true">*</span></h2><p class="ayuda">Por ejemplo: arroz blanco, hogao, salsa burger, sirope simple, patacones.</p></div></div>
-      <input type="text" id="preparacion" name="preparacion" placeholder="Nombre de la preparación" maxlength="100" required>
+      <input type="text" class="f-preparacion" placeholder="Nombre de la preparación" maxlength="100" required aria-label="Nombre de la preparación">
       <div class="msg-error">Escribe el nombre de la preparación.</div>
     </section>
 
@@ -263,88 +328,75 @@ dl.resumen dd{margin:0;font-weight:500;overflow-wrap:anywhere}
         <b>EJEMPLO – Ficha técnica patacón:</b> 1 receta = 6 porciones de 100 g.<br>
         <b>Reporte:</b> se realizaron 2 recetas → rendimiento obtenido: 12 porciones de 100 g.
       </div>
-
       <div class="fila3">
         <div data-sub="recetas">
-          <label class="sub" for="recetas">Recetas realizadas <span class="req" aria-hidden="true">*</span></label>
-          <select id="recetas" name="recetas" required>
-            <option value="" selected disabled>Elegir</option>
-            <option value="0.5">x 0,5</option>
-            <option value="1">x 1</option>
-            <option value="2">x 2</option>
-            <option value="3">x 3</option>
-            <option value="4">x 4</option>
-            <option value="5">x 5</option>
-            <option value="otro">Otro</option>
-          </select>
-          <div class="otro" id="otroCaja">
-            <input type="number" id="recetasOtro" required inputmode="decimal" min="0.1" step="0.1" placeholder="¿Cuántas?">
+          <label class="sub">Recetas realizadas <span class="req" aria-hidden="true">*</span>
+            <select class="f-recetas" required>
+              <option value="" selected disabled>Elegir</option>
+              <option value="0.5">x 0,5</option>
+              <option value="1">x 1</option>
+              <option value="2">x 2</option>
+              <option value="3">x 3</option>
+              <option value="4">x 4</option>
+              <option value="5">x 5</option>
+              <option value="otro">Otro</option>
+            </select>
+          </label>
+          <div class="otro">
+            <input type="number" class="f-recetas-otro" inputmode="decimal" min="0.1" step="0.1" placeholder="¿Cuántas?" aria-label="Cantidad de recetas">
           </div>
           <div class="msg-error propio">Indica las recetas realizadas.</div>
         </div>
         <div data-sub="unidad">
-          <label class="sub" for="unidad">Rendimiento real obtenido <span class="req" aria-hidden="true">*</span></label>
-          <select id="unidad" name="unidad" required>
-            <option value="" selected disabled>Elegir</option>
-            <option value="GR/ML">GR/ML</option>
-            <option value="Porción">Porción</option>
-          </select>
+          <label class="sub">Rendimiento real obtenido <span class="req" aria-hidden="true">*</span>
+            <select class="f-unidad" required>
+              <option value="" selected disabled>Elegir</option>
+              <option value="GR/ML">GR/ML</option>
+              <option value="Porción">Porción</option>
+            </select>
+          </label>
           <div class="msg-error propio">Elige la unidad.</div>
         </div>
         <div data-sub="total">
-          <label class="sub" for="total">Total <span class="req" aria-hidden="true">*</span></label>
-          <input type="number" id="total" name="total" inputmode="decimal" min="0" step="any" placeholder="0" required>
+          <label class="sub">Total <span class="req" aria-hidden="true">*</span>
+            <input type="number" class="f-total" inputmode="decimal" min="0" step="any" placeholder="0" required>
+          </label>
           <div class="msg-error propio">Escribe el total (mayor a 0).</div>
         </div>
       </div>
-      <div class="resumen-calc" id="resumenCalc"></div>
+      <div class="resumen-calc"></div>
     </section>
 
-    <!-- 6. Foto -->
+    <!-- 6. Fotos -->
     <section class="tarjeta" data-campo="foto">
-      <div class="paso"><div class="num">6</div><div><h2>Foto de ficha técnica <span class="req" aria-hidden="true">*</span></h2><p class="ayuda">Carga la imagen de la ficha técnica de la preparación realizada.</p></div></div>
-      <div class="zona-foto" id="zonaFoto">
-        <input type="file" id="foto" accept="image/*" required aria-label="Cargar foto de la ficha técnica">
+      <div class="paso"><div class="num">6</div><div><h2>Foto de ficha técnica <span class="req" aria-hidden="true">*</span></h2><p class="ayuda">Carga la imagen de la ficha técnica de la preparación realizada. Puedes cargar varias fotos.</p></div></div>
+      <div class="zona-foto">
+        <input type="file" class="f-foto" accept="image/*" multiple aria-label="Cargar fotos de la ficha técnica">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg>
-        <div class="t1">Tomar foto o elegir imagen</div>
-        <div class="t2">JPG, PNG o HEIC del teléfono</div>
+        <div class="t1">Tomar foto o elegir imágenes</div>
+        <div class="t2">Hasta 6 fotos · JPG, PNG o HEIC</div>
       </div>
-      <div class="vista" id="vista">
-        <img id="vistaImg" alt="Vista previa de la ficha técnica">
-        <div class="info"><div class="n" id="vistaNombre"></div><div class="s" id="vistaPeso"></div></div>
-        <button type="button" class="btn-quitar" id="quitarFoto">Quitar</button>
-      </div>
-      <div class="msg-error">Carga la foto de la ficha técnica.</div>
+      <div class="galeria"></div>
+      <div class="cuenta-fotos"></div>
+      <div class="msg-error">Carga al menos una foto de la ficha técnica.</div>
     </section>
-
-    <div class="acciones">
-      <button type="submit" class="btn" id="enviar"><span class="giro"></span><span id="enviarTxt">Enviar registro</span></button>
-      <div class="error-envio" id="errorEnvio"></div>
-    </div>
-    <p class="pie">Viajero Hostels Colombia · Seguimiento de rendimientos A&amp;B</p>
-  </form>
-
-  <section class="tarjeta" id="exito" aria-live="polite">
-    <div class="exito-cab">
-      <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
-      <div><h2>Registro enviado</h2><div class="ayuda" id="exitoId"></div></div>
-    </div>
-    <dl class="resumen" id="resumenFinal"></dl>
-    <button type="button" class="btn" id="otraVez">Registrar otra producción</button>
-  </section>
-</main>
+  </div>
+</template>
 
 <script>
 /* ================== CONFIGURACIÓN ================== */
 const URL_HOJA = "https://script.google.com/macros/s/AKfycbzA4d2lpPt7eMBx_TZbbq6s7YypFb6N-2U45zlKt8uKylHSrq-gN2s8GenbW6v67stLNw/exec"; // termina en /exec
 /* =================================================== */
 
+const MAX_FOTOS = 6;
+const MAX_PRODUCCIONES = 20;
+
 const $ = (id) => document.getElementById(id);
 const conectado = /^https:\/\/script\.google\.com\/.+\/exec$/.test(URL_HOJA);
 if (!conectado) $("avisoConfig").classList.add("visible");
 
 const form = $("form");
-let fotoProcesada = null; // {base64, mimeType, nombre}
+const contProd = $("producciones");
 
 /* ---------- Utilidades ---------- */
 const hoyISO = () => {
@@ -353,9 +405,10 @@ const hoyISO = () => {
 };
 const isoADMA = (iso) => { const [a,m,d] = iso.split("-"); return `${d}-${m}-${a}`; };
 const fmtNum = (n) => Number(n).toLocaleString("es-CO", {maximumFractionDigits: 2});
-const fmtPeso = (b) => b > 1048576 ? (b/1048576).toFixed(1) + " MB" : Math.round(b/1024) + " KB";
+const unidadTxt = (u) => u === "Porción" ? "porciones" : "gr/ml";
 const guardar = (k, v) => { try { localStorage.setItem(k, v); } catch (_) {} };
 const leer = (k) => { try { return localStorage.getItem(k) || ""; } catch (_) { return ""; } };
+const num = (v) => { const n = parseFloat(String(v).replace(",", ".")); return n > 0 ? n : NaN; };
 
 /* ---------- Fecha ---------- */
 const fecha = $("fecha");
@@ -370,75 +423,151 @@ pintarFecha();
 if (leer("rend_centro")) $("centro").value = leer("rend_centro");
 if (leer("rend_nombre")) $("nombre").value = leer("rend_nombre");
 
-/* ---------- Recetas "Otro" ---------- */
-const recetas = $("recetas");
-recetas.addEventListener("change", () => {
-  const esOtro = recetas.value === "otro";
-  $("otroCaja").classList.toggle("visible", esOtro);
-  if (esOtro) $("recetasOtro").focus();
-  calcular();
+/* ================== PRODUCCIONES ================== */
+const bloques = () => Array.from(contProd.querySelectorAll(".produccion"));
+
+function crearProduccion() {
+  const frag = $("tplProd").content.cloneNode(true);
+  const b = frag.querySelector(".produccion");
+  b._fotos = [];        // [{base64, mimeType, nombre, vista}]
+  b._pendientes = 0;    // fotos en proceso
+  const q = (s) => b.querySelector(s);
+
+  // Recetas "Otro"
+  q(".f-recetas").addEventListener("change", () => {
+    const esOtro = q(".f-recetas").value === "otro";
+    q(".otro").classList.toggle("visible", esOtro);
+    if (esOtro) q(".f-recetas-otro").focus();
+    calcular(b);
+  });
+  q(".f-recetas-otro").addEventListener("input", () => calcular(b));
+  q(".f-total").addEventListener("input", () => calcular(b));
+  q(".f-unidad").addEventListener("change", () => calcular(b));
+  q(".f-preparacion").addEventListener("input", () => {
+    q(".prod-nombre").textContent = q(".f-preparacion").value.trim() ? "· " + q(".f-preparacion").value.trim() : "";
+  });
+
+  // Fotos
+  const zona = q(".zona-foto");
+  ["dragenter","dragover"].forEach(ev => zona.addEventListener(ev, () => zona.classList.add("arrastre")));
+  ["dragleave","drop"].forEach(ev => zona.addEventListener(ev, () => zona.classList.remove("arrastre")));
+  q(".f-foto").addEventListener("change", (e) => {
+    const archivos = Array.from(e.target.files || []);
+    e.target.value = ""; // permite volver a elegir la misma foto
+    agregarFotos(b, archivos);
+  });
+
+  // Quitar producción
+  q(".btn-quitar-prod").addEventListener("click", () => {
+    b.remove();
+    renumerar();
+  });
+
+  contProd.appendChild(b);
+  renumerar();
+  return b;
+}
+
+function renumerar() {
+  const bs = bloques();
+  bs.forEach((b, i) => { b.querySelector(".prod-n").textContent = i + 1; });
+  form.classList.toggle("multi", bs.length > 1);
+  $("agregarProd").classList.toggle("oculto", bs.length >= MAX_PRODUCCIONES);
+}
+
+$("agregarProd").addEventListener("click", () => {
+  const b = crearProduccion();
+  b.scrollIntoView({ behavior: "smooth", block: "start" });
+  setTimeout(() => b.querySelector(".f-preparacion").focus({ preventScroll: true }), 350);
 });
 
-function valorRecetas() {
-  if (recetas.value === "otro") {
-    const v = parseFloat(String($("recetasOtro").value).replace(",", "."));
-    return v > 0 ? v : NaN;
-  }
-  return recetas.value ? parseFloat(recetas.value) : NaN;
+/* ---------- Valores de un bloque ---------- */
+function valorRecetas(b) {
+  const sel = b.querySelector(".f-recetas").value;
+  if (sel === "otro") return num(b.querySelector(".f-recetas-otro").value);
+  return sel ? parseFloat(sel) : NaN;
 }
-function valorTotal() {
-  const v = parseFloat(String($("total").value).replace(",", "."));
-  return v > 0 ? v : NaN;
-}
+const valorTotal = (b) => num(b.querySelector(".f-total").value);
 
-/* ---------- Cálculo de rendimiento por receta ---------- */
-function calcular() {
-  const r = valorRecetas(), t = valorTotal(), u = $("unidad").value;
-  const box = $("resumenCalc");
+function calcular(b) {
+  const r = valorRecetas(b), t = valorTotal(b), u = b.querySelector(".f-unidad").value;
+  const box = b.querySelector(".resumen-calc");
   if (r > 0 && t > 0 && u) {
-    const unidadTxt = u === "Porción" ? "porciones" : "gr/ml";
-    box.innerHTML = `Equivale a <b>${fmtNum(t / r)} ${unidadTxt}</b> por receta. Compáralo con lo que indica la ficha técnica.`;
+    box.innerHTML = `Equivale a <b>${fmtNum(t / r)} ${unidadTxt(u)}</b> por receta. Compáralo con lo que indica la ficha técnica.`;
     box.classList.add("visible");
   } else {
     box.classList.remove("visible");
   }
 }
-["recetasOtro","total"].forEach(id => $(id).addEventListener("input", calcular));
-$("unidad").addEventListener("change", calcular);
 
-/* ---------- Foto: compresión en el navegador ---------- */
-const inputFoto = $("foto");
-const zona = $("zonaFoto");
-["dragenter","dragover"].forEach(ev => zona.addEventListener(ev, () => zona.classList.add("arrastre")));
-["dragleave","drop"].forEach(ev => zona.addEventListener(ev, () => zona.classList.remove("arrastre")));
-
-inputFoto.addEventListener("change", async () => {
-  const archivo = inputFoto.files && inputFoto.files[0];
-  if (!archivo) return;
-  if (!archivo.type.startsWith("image/") && !/\.(heic|heif)$/i.test(archivo.name)) {
-    alert("El archivo debe ser una imagen.");
-    inputFoto.value = "";
-    return;
+/* ---------- Fotos ---------- */
+async function agregarFotos(b, archivos) {
+  const libres = MAX_FOTOS - b._fotos.length - b._pendientes;
+  if (archivos.length > libres) {
+    alert(`Puedes cargar máximo ${MAX_FOTOS} fotos por producción. Se agregarán ${Math.max(libres,0)}.`);
+    archivos = archivos.slice(0, Math.max(libres, 0));
   }
-  $("vistaNombre").textContent = archivo.name;
-  $("vistaPeso").textContent = "Procesando…";
-  $("vista").classList.add("visible");
-  try {
-    fotoProcesada = await comprimir(archivo);
-    $("vistaImg").src = "data:image/jpeg;base64," + fotoProcesada.base64;
-    $("vistaPeso").textContent = "Lista para enviar · " + fmtPeso(fotoProcesada.base64.length * 0.75);
-  } catch (e) {
-    // Si el navegador no puede leerla (p. ej. HEIC en algunos equipos), se envía el original.
-    if (archivo.size > 15 * 1048576) {
-      alert("La imagen es demasiado pesada. Toma la foto de nuevo o usa una de menor tamaño.");
-      quitarFoto(); return;
+  for (const archivo of archivos) {
+    if (!archivo.type.startsWith("image/") && !/\.(heic|heif)$/i.test(archivo.name)) {
+      alert(`"${archivo.name}" no es una imagen.`);
+      continue;
     }
-    fotoProcesada = { base64: await aBase64(archivo), mimeType: archivo.type || "image/heic", nombre: archivo.name };
-    $("vistaImg").removeAttribute("src");
-    $("vistaPeso").textContent = "Lista para enviar · " + fmtPeso(archivo.size);
+    b._pendientes++;
+    pintarFotos(b);
+    try {
+      const f = await comprimir(archivo);
+      f.vista = "data:image/jpeg;base64," + f.base64;
+      b._fotos.push(f);
+    } catch (_) {
+      // Formato que el navegador no puede leer (p. ej. HEIC en algunos equipos): se envía el original
+      if (archivo.size > 15 * 1048576) {
+        alert(`"${archivo.name}" es demasiado pesada. Toma la foto de nuevo o usa una de menor tamaño.`);
+      } else {
+        b._fotos.push({ base64: await aBase64(archivo), mimeType: archivo.type || "image/heic", nombre: archivo.name, vista: "" });
+      }
+    } finally {
+      b._pendientes--;
+      pintarFotos(b);
+    }
   }
-  marcar("foto", false);
-});
+  if (b._fotos.length) b.querySelector('[data-campo="foto"]').classList.remove("invalido");
+}
+
+function pintarFotos(b) {
+  const gal = b.querySelector(".galeria");
+  gal.innerHTML = "";
+  b._fotos.forEach((f, i) => {
+    const d = document.createElement("div");
+    d.className = "mini";
+    if (f.vista) {
+      const img = document.createElement("img");
+      img.src = f.vista; img.alt = "Foto " + (i + 1);
+      d.appendChild(img);
+    } else {
+      const ph = document.createElement("div");
+      ph.className = "ph"; ph.textContent = f.nombre;
+      d.appendChild(ph);
+    }
+    const x = document.createElement("button");
+    x.type = "button"; x.className = "x"; x.textContent = "×";
+    x.setAttribute("aria-label", "Quitar foto " + (i + 1));
+    x.addEventListener("click", () => { b._fotos.splice(i, 1); pintarFotos(b); });
+    d.appendChild(x);
+    gal.appendChild(d);
+  });
+  for (let i = 0; i < b._pendientes; i++) {
+    const d = document.createElement("div");
+    d.className = "mini";
+    d.innerHTML = '<div class="ph">Procesando…</div>';
+    gal.appendChild(d);
+  }
+  const n = b._fotos.length;
+  const zona = b.querySelector(".zona-foto");
+  zona.classList.toggle("llena", n > 0);
+  zona.classList.toggle("completa", n + b._pendientes >= MAX_FOTOS);
+  zona.querySelector(".t1").textContent = n > 0 ? "+ Agregar otra foto" : "Tomar foto o elegir imágenes";
+  b.querySelector(".cuenta-fotos").textContent = n > 0 ? `${n} de ${MAX_FOTOS} fotos cargadas` : "";
+}
 
 function aBase64(blob) {
   return new Promise((ok, mal) => {
@@ -448,7 +577,7 @@ function aBase64(blob) {
     fr.readAsDataURL(blob);
   });
 }
-function comprimir(archivo, maxLado = 1600, calidad = 0.82) {
+function comprimir(archivo, maxLado = 1600, calidad = 0.8) {
   return new Promise((ok, mal) => {
     const url = URL.createObjectURL(archivo);
     const img = new Image();
@@ -468,48 +597,45 @@ function comprimir(archivo, maxLado = 1600, calidad = 0.82) {
     img.src = url;
   });
 }
-function quitarFoto() {
-  fotoProcesada = null;
-  inputFoto.value = "";
-  $("vista").classList.remove("visible");
-  $("vistaImg").removeAttribute("src");
-}
-$("quitarFoto").addEventListener("click", quitarFoto);
 
 /* ---------- Validación ---------- */
-function marcar(campo, invalido) {
-  const s = document.querySelector(`[data-campo="${campo}"], [data-sub="${campo}"]`);
+function marcar(raiz, campo, invalido) {
+  const s = raiz.querySelector(`[data-campo="${campo}"], [data-sub="${campo}"]`);
   if (s) s.classList.toggle("invalido", invalido);
 }
 function validar() {
-  const errores = [];
-  const chk = (campo, ok) => { marcar(campo, !ok); if (!ok) errores.push(campo); };
-  chk("centro", !!$("centro").value);
-  chk("nombre", $("nombre").value.trim().length >= 2);
-  chk("fecha", !!fecha.value);
-  chk("preparacion", $("preparacion").value.trim().length >= 2);
-  chk("recetas", valorRecetas() > 0);
-  chk("unidad", !!$("unidad").value);
-  chk("total", valorTotal() > 0);
-  chk("foto", !!fotoProcesada);
-  return errores;
+  let ok = true;
+  const chk = (raiz, campo, valido) => { marcar(raiz, campo, !valido); if (!valido) ok = false; };
+  chk(form, "centro", !!$("centro").value);
+  chk(form, "nombre", $("nombre").value.trim().length >= 2);
+  chk(form, "fecha", !!fecha.value);
+  bloques().forEach(b => {
+    chk(b, "preparacion", b.querySelector(".f-preparacion").value.trim().length >= 2);
+    chk(b, "recetas", valorRecetas(b) > 0);
+    chk(b, "unidad", !!b.querySelector(".f-unidad").value);
+    chk(b, "total", valorTotal(b) > 0);
+    chk(b, "foto", b._fotos.length > 0);
+  });
+  return ok;
 }
-form.addEventListener("input", (e) => {
+const limpiarMarca = (e) => {
   const sec = e.target.closest("[data-sub], [data-campo]");
   if (sec && sec.classList.contains("invalido")) sec.classList.remove("invalido");
-});
-form.addEventListener("change", (e) => {
-  const sec = e.target.closest("[data-sub], [data-campo]");
-  if (sec && sec.classList.contains("invalido")) sec.classList.remove("invalido");
-});
+};
+form.addEventListener("input", limpiarMarca);
+form.addEventListener("change", limpiarMarca);
 
 /* ---------- Envío ---------- */
 const btn = $("enviar");
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   $("errorEnvio").classList.remove("visible");
-  const errores = validar();
-  if (errores.length) {
+
+  if (bloques().some(b => b._pendientes > 0)) {
+    mostrarError("Espera un momento: todavía se están cargando algunas fotos.");
+    return;
+  }
+  if (!validar()) {
     const primero = document.querySelector(".invalido");
     if (primero) primero.scrollIntoView({ behavior: "smooth", block: "center" });
     return;
@@ -519,20 +645,23 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
-  const r = valorRecetas();
   const datos = {
     centro: $("centro").value,
     nombre: $("nombre").value.trim(),
     fecha: isoADMA(fecha.value),
-    preparacion: $("preparacion").value.trim(),
-    recetas: r,
-    unidad: $("unidad").value,
-    total: valorTotal(),
-    foto: fotoProcesada
+    producciones: bloques().map(b => ({
+      preparacion: b.querySelector(".f-preparacion").value.trim(),
+      recetas: valorRecetas(b),
+      unidad: b.querySelector(".f-unidad").value,
+      total: valorTotal(b),
+      fotos: b._fotos.map(f => ({ base64: f.base64, mimeType: f.mimeType, nombre: f.nombre }))
+    }))
   };
 
   btn.disabled = true;
-  $("enviarTxt").textContent = "Enviando…";
+  $("agregarProd").disabled = true;
+  $("enviarTxt").textContent = datos.producciones.length > 1
+    ? `Enviando ${datos.producciones.length} producciones…` : "Enviando…";
   try {
     const resp = await fetch(URL_HOJA, {
       method: "POST",
@@ -548,6 +677,7 @@ form.addEventListener("submit", async (e) => {
       (err && err.message && !/fetch|network|json/i.test(err.message) ? " (" + err.message + ")" : ""));
   } finally {
     btn.disabled = false;
+    $("agregarProd").disabled = false;
     $("enviarTxt").textContent = "Enviar registro";
   }
 });
@@ -559,44 +689,47 @@ function mostrarError(t) {
 }
 
 function mostrarExito(d, id) {
-  const recTxt = "x " + fmtNum(d.recetas);
-  const filas = [
-    ["Centro", d.centro],
-    ["Nombre", d.nombre],
-    ["Fecha", d.fecha],
-    ["Preparación", d.preparacion],
-    ["Recetas", recTxt],
-    ["Rendimiento", fmtNum(d.total) + " " + (d.unidad === "Porción" ? "porciones" : "gr/ml")],
-    ["Por receta", fmtNum(d.total / d.recetas) + " " + (d.unidad === "Porción" ? "porciones" : "gr/ml")]
-  ];
+  const n = d.producciones.length;
+  $("exitoTitulo").textContent = n > 1 ? `${n} producciones enviadas` : "Registro enviado";
+  $("exitoId").textContent = id ? "Código de registro: " + id : "";
+
   const dl = $("resumenFinal");
   dl.innerHTML = "";
-  filas.forEach(([k, v]) => {
+  [["Centro", d.centro], ["Nombre", d.nombre], ["Fecha", d.fecha]].forEach(([k, v]) => {
     const dt = document.createElement("dt"); dt.textContent = k;
     const dd = document.createElement("dd"); dd.textContent = v;
     dl.append(dt, dd);
   });
-  $("exitoId").textContent = id ? "Código de registro: " + id : "";
+
+  const ol = $("listaProd");
+  ol.innerHTML = "";
+  d.producciones.forEach((p, i) => {
+    const li = document.createElement("li");
+    const a = document.createElement("div"); a.className = "p1";
+    a.textContent = `${i + 1}. ${p.preparacion}`;
+    const b = document.createElement("div"); b.className = "p2";
+    b.textContent = `x ${fmtNum(p.recetas)} recetas → ${fmtNum(p.total)} ${unidadTxt(p.unidad)} · ` +
+      `${fmtNum(p.total / p.recetas)} por receta · ${p.fotos.length} foto${p.fotos.length > 1 ? "s" : ""}`;
+    li.append(a, b);
+    ol.appendChild(li);
+  });
+
   form.classList.add("oculto");
   $("exito").classList.add("visible");
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 $("otraVez").addEventListener("click", () => {
-  // Conserva sede, nombre y fecha; limpia el resto
-  $("preparacion").value = "";
-  recetas.value = "";
-  $("recetasOtro").value = "";
-  $("otroCaja").classList.remove("visible");
-  $("unidad").value = "";
-  $("total").value = "";
-  calcular();
-  quitarFoto();
+  // Conserva sede, nombre y fecha; reinicia las producciones
+  contProd.innerHTML = "";
+  crearProduccion();
   $("exito").classList.remove("visible");
   form.classList.remove("oculto");
-  $("preparacion").focus();
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
+
+/* Primera producción */
+crearProduccion();
 </script>
 </body>
 </html>
