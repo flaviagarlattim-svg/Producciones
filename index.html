@@ -195,7 +195,9 @@ input:focus,select:focus{outline:none;border-color:var(--naranja);box-shadow:0 0
 .btn[disabled]{opacity:.7;cursor:progress}
 .btn.sec{background:transparent;color:var(--naranja);border:1.5px dashed var(--naranja)}
 .btn.sec:hover{background:var(--naranja-suave)}
-.btn-agregar{margin:4px 0 22px}
+.btn-agregar{margin:0 0 14px;display:none !important}
+.produccion:last-child .btn-agregar{display:flex !important}
+.lleno .btn-agregar{display:none !important}
 .btn-agregar .mas{font-size:22px;line-height:1;font-weight:500}
 .giro{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;animation:g .8s linear infinite;display:none}
 .btn[disabled] .giro{display:inline-block}
@@ -281,10 +283,6 @@ ol.lista-prod .p2{color:var(--tinta-2);font-size:14px}
     <!-- 4, 5 y 6: una o varias producciones -->
     <div id="producciones"></div>
 
-    <button type="button" class="btn sec btn-agregar" id="agregarProd">
-      <span class="mas" aria-hidden="true">+</span> Agrega nueva producción
-    </button>
-
     <div class="acciones">
       <button type="submit" class="btn" id="enviar"><span class="giro"></span><span id="enviarTxt">Enviar registro</span></button>
       <div class="error-envio" id="errorEnvio"></div>
@@ -366,6 +364,10 @@ ol.lista-prod .p2{color:var(--tinta-2);font-size:14px}
       </div>
       <div class="resumen-calc"></div>
     </section>
+
+    <button type="button" class="btn sec btn-agregar">
+      <span class="mas" aria-hidden="true">+</span> Agrega nueva producción
+    </button>
 
     <!-- 6. Fotos -->
     <section class="tarjeta" data-campo="foto">
@@ -457,6 +459,13 @@ function crearProduccion() {
     agregarFotos(b, archivos);
   });
 
+  // Agregar nueva producción
+  q(".btn-agregar").addEventListener("click", () => {
+    const nb = crearProduccion();
+    nb.scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => nb.querySelector(".f-preparacion").focus({ preventScroll: true }), 350);
+  });
+
   // Quitar producción
   q(".btn-quitar-prod").addEventListener("click", () => {
     b.remove();
@@ -472,14 +481,9 @@ function renumerar() {
   const bs = bloques();
   bs.forEach((b, i) => { b.querySelector(".prod-n").textContent = i + 1; });
   form.classList.toggle("multi", bs.length > 1);
-  $("agregarProd").classList.toggle("oculto", bs.length >= MAX_PRODUCCIONES);
+  form.classList.toggle("lleno", bs.length >= MAX_PRODUCCIONES);
 }
 
-$("agregarProd").addEventListener("click", () => {
-  const b = crearProduccion();
-  b.scrollIntoView({ behavior: "smooth", block: "start" });
-  setTimeout(() => b.querySelector(".f-preparacion").focus({ preventScroll: true }), 350);
-});
 
 /* ---------- Valores de un bloque ---------- */
 function valorRecetas(b) {
@@ -659,7 +663,7 @@ form.addEventListener("submit", async (e) => {
   };
 
   btn.disabled = true;
-  $("agregarProd").disabled = true;
+  form.querySelectorAll(".btn-agregar").forEach(x => x.disabled = true);
   $("enviarTxt").textContent = datos.producciones.length > 1
     ? `Enviando ${datos.producciones.length} producciones…` : "Enviando…";
   try {
@@ -677,7 +681,7 @@ form.addEventListener("submit", async (e) => {
       (err && err.message && !/fetch|network|json/i.test(err.message) ? " (" + err.message + ")" : ""));
   } finally {
     btn.disabled = false;
-    $("agregarProd").disabled = false;
+    form.querySelectorAll(".btn-agregar").forEach(x => x.disabled = false);
     $("enviarTxt").textContent = "Enviar registro";
   }
 });
