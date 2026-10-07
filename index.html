@@ -195,9 +195,8 @@ input:focus,select:focus{outline:none;border-color:var(--naranja);box-shadow:0 0
 .btn[disabled]{opacity:.7;cursor:progress}
 .btn.sec{background:transparent;color:var(--naranja);border:1.5px dashed var(--naranja)}
 .btn.sec:hover{background:var(--naranja-suave)}
-.btn-agregar{margin:0 0 14px;display:none !important}
-.produccion:last-child .btn-agregar{display:flex !important}
-.lleno .btn-agregar{display:none !important}
+.btn-agregar{margin:0 0 14px}
+.lleno .btn-agregar{display:none}
 .btn-agregar .mas{font-size:22px;line-height:1;font-weight:500}
 .giro{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;animation:g .8s linear infinite;display:none}
 .btn[disabled] .giro{display:inline-block}
@@ -280,8 +279,26 @@ ol.lista-prod .p2{color:var(--tinta-2);font-size:14px}
       <div class="msg-error">Selecciona la fecha.</div>
     </section>
 
-    <!-- 4, 5 y 6: una o varias producciones -->
+    <!-- 4 y 5: una o varias producciones -->
     <div id="producciones"></div>
+
+    <button type="button" class="btn sec btn-agregar" id="agregarProd">
+      <span class="mas" aria-hidden="true">+</span> Agrega nueva producción
+    </button>
+
+  <!-- 6. Fotos -->
+  <section class="tarjeta" data-campo="foto" id="seccionFotos">
+    <div class="paso"><div class="num">6</div><div><h2>Foto de ficha técnica <span class="req" aria-hidden="true">*</span></h2><p class="ayuda">Carga las imágenes de las fichas técnicas de todas las preparaciones realizadas. Puedes cargar varias fotos.</p></div></div>
+    <div class="zona-foto">
+      <input type="file" class="f-foto" accept="image/*" multiple aria-label="Cargar fotos de la ficha técnica">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg>
+      <div class="t1">Tomar foto o elegir imágenes</div>
+      <div class="t2">Hasta 20 fotos · JPG, PNG o HEIC</div>
+    </div>
+    <div class="galeria"></div>
+    <div class="cuenta-fotos"></div>
+    <div class="msg-error">Carga al menos una foto de ficha técnica.</div>
+  </section>
 
     <div class="acciones">
       <button type="submit" class="btn" id="enviar"><span class="giro"></span><span id="enviarTxt">Enviar registro</span></button>
@@ -301,7 +318,7 @@ ol.lista-prod .p2{color:var(--tinta-2);font-size:14px}
   </section>
 </main>
 
-<!-- Plantilla de una producción (puntos 4, 5 y 6) -->
+<!-- Plantilla de una producción (puntos 4 y 5) -->
 <template id="tplProd">
   <div class="produccion">
     <div class="prod-cab">
@@ -365,23 +382,6 @@ ol.lista-prod .p2{color:var(--tinta-2);font-size:14px}
       <div class="resumen-calc"></div>
     </section>
 
-    <button type="button" class="btn sec btn-agregar">
-      <span class="mas" aria-hidden="true">+</span> Agrega nueva producción
-    </button>
-
-    <!-- 6. Fotos -->
-    <section class="tarjeta" data-campo="foto">
-      <div class="paso"><div class="num">6</div><div><h2>Foto de ficha técnica <span class="req" aria-hidden="true">*</span></h2><p class="ayuda">Carga la imagen de la ficha técnica de la preparación realizada. Puedes cargar varias fotos.</p></div></div>
-      <div class="zona-foto">
-        <input type="file" class="f-foto" accept="image/*" multiple aria-label="Cargar fotos de la ficha técnica">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg>
-        <div class="t1">Tomar foto o elegir imágenes</div>
-        <div class="t2">Hasta 6 fotos · JPG, PNG o HEIC</div>
-      </div>
-      <div class="galeria"></div>
-      <div class="cuenta-fotos"></div>
-      <div class="msg-error">Carga al menos una foto de la ficha técnica.</div>
-    </section>
   </div>
 </template>
 
@@ -390,7 +390,7 @@ ol.lista-prod .p2{color:var(--tinta-2);font-size:14px}
 const URL_HOJA = "https://script.google.com/macros/s/AKfycbzA4d2lpPt7eMBx_TZbbq6s7YypFb6N-2U45zlKt8uKylHSrq-gN2s8GenbW6v67stLNw/exec"; // termina en /exec
 /* =================================================== */
 
-const MAX_FOTOS = 6;
+const MAX_FOTOS = 20;
 const MAX_PRODUCCIONES = 20;
 
 const $ = (id) => document.getElementById(id);
@@ -431,8 +431,6 @@ const bloques = () => Array.from(contProd.querySelectorAll(".produccion"));
 function crearProduccion() {
   const frag = $("tplProd").content.cloneNode(true);
   const b = frag.querySelector(".produccion");
-  b._fotos = [];        // [{base64, mimeType, nombre, vista}]
-  b._pendientes = 0;    // fotos en proceso
   const q = (s) => b.querySelector(s);
 
   // Recetas "Otro"
@@ -447,23 +445,6 @@ function crearProduccion() {
   q(".f-unidad").addEventListener("change", () => calcular(b));
   q(".f-preparacion").addEventListener("input", () => {
     q(".prod-nombre").textContent = q(".f-preparacion").value.trim() ? "· " + q(".f-preparacion").value.trim() : "";
-  });
-
-  // Fotos
-  const zona = q(".zona-foto");
-  ["dragenter","dragover"].forEach(ev => zona.addEventListener(ev, () => zona.classList.add("arrastre")));
-  ["dragleave","drop"].forEach(ev => zona.addEventListener(ev, () => zona.classList.remove("arrastre")));
-  q(".f-foto").addEventListener("change", (e) => {
-    const archivos = Array.from(e.target.files || []);
-    e.target.value = ""; // permite volver a elegir la misma foto
-    agregarFotos(b, archivos);
-  });
-
-  // Agregar nueva producción
-  q(".btn-agregar").addEventListener("click", () => {
-    const nb = crearProduccion();
-    nb.scrollIntoView({ behavior: "smooth", block: "start" });
-    setTimeout(() => nb.querySelector(".f-preparacion").focus({ preventScroll: true }), 350);
   });
 
   // Quitar producción
@@ -485,6 +466,12 @@ function renumerar() {
 }
 
 
+$("agregarProd").addEventListener("click", () => {
+  const nb = crearProduccion();
+  nb.scrollIntoView({ behavior: "smooth", block: "start" });
+  setTimeout(() => nb.querySelector(".f-preparacion").focus({ preventScroll: true }), 350);
+});
+
 /* ---------- Valores de un bloque ---------- */
 function valorRecetas(b) {
   const sel = b.querySelector(".f-recetas").value;
@@ -504,11 +491,28 @@ function calcular(b) {
   }
 }
 
-/* ---------- Fotos ---------- */
+/* ---------- Fotos (punto 6, único para todas las producciones) ---------- */
+const secFotos = $("seccionFotos");
+secFotos._fotos = [];      // [{base64, mimeType, nombre, vista}]
+secFotos._pendientes = 0;  // fotos en proceso
+(() => {
+  const zona = secFotos.querySelector(".zona-foto");
+  ["dragenter","dragover"].forEach(ev => zona.addEventListener(ev, () => zona.classList.add("arrastre")));
+  ["dragleave","drop"].forEach(ev => zona.addEventListener(ev, () => zona.classList.remove("arrastre")));
+  secFotos.querySelector(".f-foto").addEventListener("change", (e) => {
+    const archivos = Array.from(e.target.files || []);
+    e.target.value = ""; // permite volver a elegir la misma foto
+    agregarFotos(secFotos, archivos);
+  });
+})();
+function vaciarFotos() {
+  secFotos._fotos = [];
+  pintarFotos(secFotos);
+}
 async function agregarFotos(b, archivos) {
   const libres = MAX_FOTOS - b._fotos.length - b._pendientes;
   if (archivos.length > libres) {
-    alert(`Puedes cargar máximo ${MAX_FOTOS} fotos por producción. Se agregarán ${Math.max(libres,0)}.`);
+    alert(`Puedes cargar máximo ${MAX_FOTOS} fotos. Se agregarán ${Math.max(libres,0)}.`);
     archivos = archivos.slice(0, Math.max(libres, 0));
   }
   for (const archivo of archivos) {
@@ -534,7 +538,7 @@ async function agregarFotos(b, archivos) {
       pintarFotos(b);
     }
   }
-  if (b._fotos.length) b.querySelector('[data-campo="foto"]').classList.remove("invalido");
+  if (b._fotos.length) b.classList.remove("invalido");
 }
 
 function pintarFotos(b) {
@@ -613,12 +617,12 @@ function validar() {
   chk(form, "centro", !!$("centro").value);
   chk(form, "nombre", $("nombre").value.trim().length >= 2);
   chk(form, "fecha", !!fecha.value);
+  chk(form, "foto", secFotos._fotos.length > 0);
   bloques().forEach(b => {
     chk(b, "preparacion", b.querySelector(".f-preparacion").value.trim().length >= 2);
     chk(b, "recetas", valorRecetas(b) > 0);
     chk(b, "unidad", !!b.querySelector(".f-unidad").value);
     chk(b, "total", valorTotal(b) > 0);
-    chk(b, "foto", b._fotos.length > 0);
   });
   return ok;
 }
@@ -635,7 +639,7 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   $("errorEnvio").classList.remove("visible");
 
-  if (bloques().some(b => b._pendientes > 0)) {
+  if (secFotos._pendientes > 0) {
     mostrarError("Espera un momento: todavía se están cargando algunas fotos.");
     return;
   }
@@ -657,13 +661,13 @@ form.addEventListener("submit", async (e) => {
       preparacion: b.querySelector(".f-preparacion").value.trim(),
       recetas: valorRecetas(b),
       unidad: b.querySelector(".f-unidad").value,
-      total: valorTotal(b),
-      fotos: b._fotos.map(f => ({ base64: f.base64, mimeType: f.mimeType, nombre: f.nombre }))
-    }))
+      total: valorTotal(b)
+    })),
+    fotos: secFotos._fotos.map(f => ({ base64: f.base64, mimeType: f.mimeType, nombre: f.nombre }))
   };
 
   btn.disabled = true;
-  form.querySelectorAll(".btn-agregar").forEach(x => x.disabled = true);
+  $("agregarProd").disabled = true;
   $("enviarTxt").textContent = datos.producciones.length > 1
     ? `Enviando ${datos.producciones.length} producciones…` : "Enviando…";
   try {
@@ -681,7 +685,7 @@ form.addEventListener("submit", async (e) => {
       (err && err.message && !/fetch|network|json/i.test(err.message) ? " (" + err.message + ")" : ""));
   } finally {
     btn.disabled = false;
-    form.querySelectorAll(".btn-agregar").forEach(x => x.disabled = false);
+    $("agregarProd").disabled = false;
     $("enviarTxt").textContent = "Enviar registro";
   }
 });
@@ -699,7 +703,9 @@ function mostrarExito(d, id) {
 
   const dl = $("resumenFinal");
   dl.innerHTML = "";
-  [["Centro", d.centro], ["Nombre", d.nombre], ["Fecha", d.fecha]].forEach(([k, v]) => {
+  const nf = d.fotos.length;
+  [["Centro", d.centro], ["Nombre", d.nombre], ["Fecha", d.fecha],
+   ["Fotos", `${nf} foto${nf > 1 ? "s" : ""} de ficha técnica`]].forEach(([k, v]) => {
     const dt = document.createElement("dt"); dt.textContent = k;
     const dd = document.createElement("dd"); dd.textContent = v;
     dl.append(dt, dd);
@@ -713,7 +719,7 @@ function mostrarExito(d, id) {
     a.textContent = `${i + 1}. ${p.preparacion}`;
     const b = document.createElement("div"); b.className = "p2";
     b.textContent = `x ${fmtNum(p.recetas)} recetas → ${fmtNum(p.total)} ${unidadTxt(p.unidad)} · ` +
-      `${fmtNum(p.total / p.recetas)} por receta · ${p.fotos.length} foto${p.fotos.length > 1 ? "s" : ""}`;
+      `${fmtNum(p.total / p.recetas)} por receta`;
     li.append(a, b);
     ol.appendChild(li);
   });
@@ -727,6 +733,7 @@ $("otraVez").addEventListener("click", () => {
   // Conserva sede, nombre y fecha; reinicia las producciones
   contProd.innerHTML = "";
   crearProduccion();
+  vaciarFotos();
   $("exito").classList.remove("visible");
   form.classList.remove("oculto");
   window.scrollTo({ top: 0, behavior: "smooth" });
